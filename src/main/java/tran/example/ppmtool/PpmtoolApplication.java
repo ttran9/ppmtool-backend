@@ -7,6 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class PpmtoolApplication {
 
     public static void main(String[] args) {
+        if(System.getenv("JWT_PRIVATE_KEY") == null) {
+            System.out.println("we have a problem!!!!>!!");
+        }
         SpringApplication.run(PpmtoolApplication.class, args);
     }
 
