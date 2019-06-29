@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import tran.example.ppmtool.constants.security.SecurityConstants;
 import tran.example.ppmtool.security.JwtAuthenticationFilter;
 import tran.example.ppmtool.services.security.CustomUserDetailsService;
+import tran.example.ppmtool.web.filters.RedirectToIndexFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -38,6 +39,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new JwtAuthenticationFilter();
     }
 
+    @Bean
+    public RedirectToIndexFilter redirectToIndexFilter() {
+        return new RedirectToIndexFilter();
+    }
+
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -54,6 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).and()
                 .sessionManagement()
@@ -73,9 +80,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js"
                 ).permitAll()
-                .antMatchers(SecurityConstants.SIGN_UP_URLS).permitAll()
+                .antMatchers(SecurityConstants.SIGN_UP_URLS).anonymous()
                 .antMatchers(SecurityConstants.H2_URL).permitAll()
                 .anyRequest().authenticated();
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(redirectToIndexFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }
