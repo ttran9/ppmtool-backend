@@ -23,8 +23,8 @@ public class RedirectToIndexFilter implements Filter {
         }
         else if(matchRegexToRequest(PB_UPT_REGEX, requestURI)) {
             request.getRequestDispatcher(requestURI).forward(request, response);
-         }
-         else {
+        }
+        else {
             chain.doFilter(request, response);
         }
     }
