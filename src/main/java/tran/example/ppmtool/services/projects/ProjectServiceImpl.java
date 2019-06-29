@@ -10,8 +10,8 @@ import tran.example.ppmtool.exceptions.projects.ProjectNotFoundException;
 import tran.example.ppmtool.repositories.applicationusers.ApplicationUserRepository;
 import tran.example.ppmtool.repositories.project.BacklogRepository;
 import tran.example.ppmtool.repositories.project.ProjectRepository;
+import tran.example.ppmtool.services.security.utility.SecurityUtil;
 
-import java.security.Principal;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -31,12 +31,12 @@ public class ProjectServiceImpl implements ProjectService {
     /**
      * saves or updates a project.
      * @param project The project to be saved or updated.
-     * @param principal The object expected to hold the logged in user's information (such as username).
      * @return Returns the saved or updated object.
      */
     @Override
-    public Project saveOrUpdateProject(Project project, Principal principal) {
+    public Project saveOrUpdateProject(Project project) {
 
+        String userName = SecurityUtil.getLoggedInUserName();
         /*
          * check for the case where we are trying to update a project not in our account.
          * check for the case where we are trying to pass in an invalid id but we still create a project (we don't want this case!)
@@ -44,7 +44,7 @@ public class ProjectServiceImpl implements ProjectService {
         if(project.getId() != null) {
             Project existingProject = projectRepository.findByProjectIdentifier(project.getProjectIdentifier());
 
-            if(existingProject != null && (!existingProject.getProjectLeader().equals(principal.getName()))) {
+            if(existingProject != null && (!existingProject.getProjectLeader().equals(userName))) {
                 throw new ProjectNotFoundException("Project not found in your account");
             }
             else if(existingProject == null) {
@@ -54,7 +54,7 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
         try {
-            ApplicationUser user = applicationUserRepository.findByUsername(principal.getName());
+            ApplicationUser user = applicationUserRepository.findByUsername(userName);
             project.setUser(user);
             project.setProjectLeader(user.getUsername());
 
@@ -83,18 +83,17 @@ public class ProjectServiceImpl implements ProjectService {
     /**
      * retrieves the project by the projectIdentifier
      * @param projectId The project's projectIdentifier field.
-     * @param principal The logged in user, may not be the owner of this project.
      * @return Returns the project with the specified projectIdentifier and if the username matches the projectLeader name.
      */
     @Override
-    public Project findProjectByIdentifier(String projectId, Principal principal) {
+    public Project findProjectByIdentifier(String projectId) {
         Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
 
         if(project == null) {
             throw new ProjectIdException("Project ID '" + projectId + "' doesn't exist");
         }
 
-        if (!project.getProjectLeader().equals(principal.getName())) {
+        if (!project.getProjectLeader().equals(SecurityUtil.getLoggedInUserName())) {
             throw new ProjectNotFoundException("Project not found in your account");
         }
 
@@ -103,28 +102,26 @@ public class ProjectServiceImpl implements ProjectService {
 
     /**
      * A method to retrieve all the objects in our database.
-     * @param principal The logged in user to retrieve all the projects for.
      * @return Returns all the projects.
      */
     @Override
-    public Iterable<Project> findAllProjects(Principal principal) {
-        String username = principal.getName();
+    public Iterable<Project> findAllProjects() {
+        String username = SecurityUtil.getLoggedInUserName();
         return projectRepository.findAllByProjectLeader(username);
     }
 
     /**
      * deletes a project with the specified identifier
      * @param projectId The project's identifier.
-     * @param principal The object expected to hold the logged in user's information (such as username).
      */
     @Override
-    public void deleteProjectByIdentifier(String projectId, Principal principal) {
+    public void deleteProjectByIdentifier(String projectId) {
 //        Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
 //
 //        if(project == null) {
 //            throw new ProjectIdException("Cannot Delete Project with ID '" + projectId + "'. This project doesn't exist");
 //        }
 
-        projectRepository.delete(findProjectByIdentifier(projectId, principal));
+        projectRepository.delete(findProjectByIdentifier(projectId));
     }
 }
