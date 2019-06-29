@@ -24,11 +24,10 @@ file from an environment variable instead of just having it as a hard-coded publ
         - I will attempt to investigate the above where it appears I am not utilizing react-router properly and there are
     some undesirable side effects.
     2. **Solution (to i.):** 
-        - As of 6/28/2019, I have uploaded a solution that works for happy-path requests (uses enter in URLs correctly)
-        but if I chop off character(s) from the identifier (such as going from 5 letters to 4) I will not have the proper
-        forwarding inside of the redirect to index filter.
-            - I believe the issue here is that I am not writing the proper regex to take in the intended URLs as I requested..
-            - I am currently working on fixing up my regex or perhaps I will have to implement more regexes for my solution.
+        - As of 6/28/2019, I have uploaded a solution.
+            - However, I need to continue to test this further to ensure that the regexes I have in place are working.
+            - Earlier, I did not allow the users to type lower case letters although this would be acceptable so I have slightly
+            modified the regex to allow for this.
         - I found [this](https://stackoverflow.com/questions/47689971/how-to-work-with-react-routers-and-spring-boot-controller)
         to be helpful as I decided to implement this but to also use regular expressions to match what the user was typing in
         and redirect to the index.html single page application and then let BrowserRouter take over.
