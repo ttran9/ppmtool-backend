@@ -23,7 +23,7 @@ file from an environment variable instead of just having it as a hard-coded publ
         a valid jwt token inside of their localStorage.
         - I will attempt to investigate the above where it appears I am not utilizing react-router properly and there are
     some undesirable side effects.
-    2. **Solution** (to i.):
+    2. **Solution (to i.):** 
         - I found [this](https://stackoverflow.com/questions/47689971/how-to-work-with-react-routers-and-spring-boot-controller)
         to be helpful as I decided to implement this but to also use regular expressions to match what the user was typing in
         and redirect to the index.html single page application and then let BrowserRouter take over.
