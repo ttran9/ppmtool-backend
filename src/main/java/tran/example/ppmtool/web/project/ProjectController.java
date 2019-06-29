@@ -27,33 +27,32 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult bindingResult,
-                                              Principal principal) {
+    public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult bindingResult) {
         // we should return a generic type so we can return a ResponseEntity with more than just Project.
 
         ResponseEntity<?> errorMap = mapValidationErrorService.outputCustomError(bindingResult);
         if (errorMap != null) return errorMap;
 
-        Project project1 = this.projectService.saveOrUpdateProject(project, principal);
+        Project project1 = this.projectService.saveOrUpdateProject(project);
         return new ResponseEntity<>(project1, HttpStatus.CREATED);
     }
 
     @GetMapping("/{projectId}")
-    public ResponseEntity<?> getProjectByProjectIdentifier(@PathVariable String projectId, Principal principal) {
+    public ResponseEntity<?> getProjectByProjectIdentifier(@PathVariable String projectId) {
 
-        Project project = this.projectService.findProjectByIdentifier(projectId, principal);
+        Project project = this.projectService.findProjectByIdentifier(projectId);
 
         return new ResponseEntity<>(project, HttpStatus.OK);
     }
 
     @GetMapping("/all")
-    public Iterable<Project> getAllProjects(Principal principal) {
-        return this.projectService.findAllProjects(principal);
+    public Iterable<Project> getAllProjects() {
+        return this.projectService.findAllProjects();
     }
 
     @DeleteMapping("/{projectId}")
-    public ResponseEntity<?> deleteProject(@PathVariable String projectId, Principal principal) {
-        this.projectService.deleteProjectByIdentifier(projectId, principal);
+    public ResponseEntity<?> deleteProject(@PathVariable String projectId) {
+        this.projectService.deleteProjectByIdentifier(projectId);
 
         return new ResponseEntity<>("Project with ID: '" + projectId + "' was deleted", HttpStatus.OK);
     }
