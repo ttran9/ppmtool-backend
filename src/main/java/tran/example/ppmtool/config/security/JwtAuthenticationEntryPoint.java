@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-import tran.example.ppmtool.exceptions.security.InvalidLoginResponse;
+import tran.example.ppmtool.exceptions.security.InvalidLoginExceptionResponse;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -19,8 +19,8 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                          AuthenticationException e) throws IOException, ServletException {
-        InvalidLoginResponse invalidLoginResponse = new InvalidLoginResponse();
-        String jsonLoginResponse = new Gson().toJson(invalidLoginResponse);
+        InvalidLoginExceptionResponse invalidLoginExceptionResponse = new InvalidLoginExceptionResponse();
+        String jsonLoginResponse = new Gson().toJson(invalidLoginExceptionResponse);
 
         httpServletResponse.setContentType("application/json");
         httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
