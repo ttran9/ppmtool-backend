@@ -2,6 +2,7 @@ package tran.example.ppmtool.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,7 +40,7 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     }
 
     @ExceptionHandler
-    public final ResponseEntity<Object> handleInvalidLogin(InvalidLoginException ex) {
+    public final ResponseEntity<Object> handleInvalidLogin(BadCredentialsException ex) {
         InvalidLoginExceptionResponse invalidLoginExceptionResponse = new InvalidLoginExceptionResponse();
         return new ResponseEntity<>(invalidLoginExceptionResponse, HttpStatus.BAD_REQUEST);
     }
