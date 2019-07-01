@@ -11,6 +11,8 @@ import tran.example.ppmtool.exceptions.projects.ProjectNotFoundException;
 import tran.example.ppmtool.exceptions.projects.ProjectIdExceptionResponse;
 import tran.example.ppmtool.exceptions.projects.ProjectIdException;
 import tran.example.ppmtool.exceptions.projects.ProjectNotFoundExceptionResponse;
+import tran.example.ppmtool.exceptions.security.InvalidLoginException;
+import tran.example.ppmtool.exceptions.security.InvalidLoginExceptionResponse;
 import tran.example.ppmtool.exceptions.security.UsernameDuplicateException;
 import tran.example.ppmtool.exceptions.security.UsernameDuplicateExceptionResponse;
 
@@ -34,6 +36,12 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     public final ResponseEntity<Object> handleDuplicateUsername(UsernameDuplicateException ex) {
         UsernameDuplicateExceptionResponse duplicateUserNameException = new UsernameDuplicateExceptionResponse(ex.getMessage());
         return new ResponseEntity<>(duplicateUserNameException, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleInvalidLogin(InvalidLoginException ex) {
+        InvalidLoginExceptionResponse invalidLoginExceptionResponse = new InvalidLoginExceptionResponse();
+        return new ResponseEntity<>(invalidLoginExceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
 }
