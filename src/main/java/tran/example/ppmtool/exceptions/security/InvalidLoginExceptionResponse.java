@@ -3,11 +3,11 @@ package tran.example.ppmtool.exceptions.security;
 /**
  * A custom JSON object that will be returned when we are trying to access a resource that requires authentication.
  */
-public class InvalidLoginResponse {
+public class InvalidLoginExceptionResponse {
     private String username;
     private String password;
 
-    public InvalidLoginResponse() {
+    public InvalidLoginExceptionResponse() {
         this.username = "Invalid Username";
         this.password = "Invalid Password";
     }
