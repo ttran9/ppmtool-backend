@@ -27,20 +27,15 @@ public class ApplicationUserAuthenticationServiceImpl implements ApplicationUser
      */
     @Override
     public ResponseEntity<?> applicationUserAuthentication(LoginRequest loginRequest, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
-        try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            loginRequest.getUsername(),
-                            loginRequest.getPassword()
-                    )
-            );
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getUsername(),
+                        loginRequest.getPassword()
+                )
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            String jwtToken = TOKEN_PREFIX + jwtTokenProvider.generateToken(authentication);
-            return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwtToken));
-        } catch (AuthenticationException ae) {
-            System.out.println(ae.getMessage());
-            throw new InvalidLoginException();
-        }
+        String jwtToken = TOKEN_PREFIX + jwtTokenProvider.generateToken(authentication);
+        return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwtToken));
     }
 }
