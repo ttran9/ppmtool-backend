@@ -1,11 +1,15 @@
 package tran.example.ppmtool.services.security;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import tran.example.ppmtool.exceptions.security.InvalidLoginException;
+import tran.example.ppmtool.exceptions.security.InvalidLoginExceptionResponse;
 import tran.example.ppmtool.payload.JWTLoginSuccessResponse;
 import tran.example.ppmtool.payload.LoginRequest;
 import tran.example.ppmtool.security.JwtTokenProvider;
@@ -23,15 +27,20 @@ public class ApplicationUserAuthenticationServiceImpl implements ApplicationUser
      */
     @Override
     public ResponseEntity<?> applicationUserAuthentication(LoginRequest loginRequest, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsername(),
-                        loginRequest.getPassword()
-                )
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getUsername(),
+                            loginRequest.getPassword()
+                    )
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String jwtToken = TOKEN_PREFIX + jwtTokenProvider.generateToken(authentication);
-        return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwtToken));
+            String jwtToken = TOKEN_PREFIX + jwtTokenProvider.generateToken(authentication);
+            return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwtToken));
+        } catch (AuthenticationException ae) {
+            System.out.println(ae.getMessage());
+            throw new InvalidLoginException();
+        }
     }
 }
