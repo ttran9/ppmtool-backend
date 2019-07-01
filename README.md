@@ -37,3 +37,10 @@ file from an environment variable instead of just having it as a hard-coded publ
         - I had another solution which wasn't very viable because I created a Controller to handle incoming requests 
         and to map those requests to the index page because if I had more routes to accept then I would've had to hard-code
         more routes into the controller and also the SecurityConfig class. So the above solution appears to be more flexible
+    3. When attempting to login I noticed that we were throwing a 405 error and more specificially on the back-end we are using
+    spring security's authentication method which throws a BadCredentials exception so this had to be properly handled
+    by our CustomResponseEntityExceptionHandler so that the error message indicating that the user has entered an invalid
+    username and password.
+        - When debugging this I first looked at the console and noticed that when we were submitting we were hitting the
+        /api/login with a POST request and shortly I realized that CustomResponseEntityExceptionHandler did not handle
+        the BadCredentials exception and that is why I added in an extra method with the @ExceptionHandler annotation.
