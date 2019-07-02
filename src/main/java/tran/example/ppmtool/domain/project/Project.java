@@ -52,7 +52,7 @@ public class Project {
      */
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project")
     /*
-     * without the annotation we would have an infinite loop because we're trying to set the relationship between project
+     * without the annotation (@JsonIgnore) we would have an infinite loop because we're trying to set the relationship between project
      * and backlog an infinite number of times.
      */
     @JsonIgnore
