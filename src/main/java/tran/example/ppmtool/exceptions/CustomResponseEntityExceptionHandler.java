@@ -3,6 +3,7 @@ package tran.example.ppmtool.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,10 +13,7 @@ import tran.example.ppmtool.exceptions.projects.ProjectNotFoundException;
 import tran.example.ppmtool.exceptions.projects.ProjectIdExceptionResponse;
 import tran.example.ppmtool.exceptions.projects.ProjectIdException;
 import tran.example.ppmtool.exceptions.projects.ProjectNotFoundExceptionResponse;
-import tran.example.ppmtool.exceptions.security.InvalidLoginException;
-import tran.example.ppmtool.exceptions.security.InvalidLoginExceptionResponse;
-import tran.example.ppmtool.exceptions.security.UsernameDuplicateException;
-import tran.example.ppmtool.exceptions.security.UsernameDuplicateExceptionResponse;
+import tran.example.ppmtool.exceptions.security.*;
 
 @ControllerAdvice
 @RestController
@@ -43,6 +41,24 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     public final ResponseEntity<Object> handleInvalidLogin(BadCredentialsException ex) {
         InvalidLoginExceptionResponse invalidLoginExceptionResponse = new InvalidLoginExceptionResponse();
         return new ResponseEntity<>(invalidLoginExceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleDisabledAccountLogin(DisabledException ex) {
+        InvalidLoginExceptionResponse invalidLoginExceptionResponse = new InvalidLoginExceptionResponse();
+        return new ResponseEntity<>(invalidLoginExceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleUsernameCreationException(UsernameCreationErrorException ex) {
+        UsernameCreationErrorExceptionResponse usernameCreationErrorExceptionResponse = new UsernameCreationErrorExceptionResponse(ex.getMessage());
+        return new ResponseEntity<>(usernameCreationErrorExceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleUsernameCreationException(VerificationTokenException ex) {
+        VerificationTokenExceptionResponse response = new VerificationTokenExceptionResponse(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
 }

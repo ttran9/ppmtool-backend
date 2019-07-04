@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import tran.example.ppmtool.domain.project.Project;
+import tran.example.ppmtool.domain.security.VerificationToken;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -33,11 +34,14 @@ public class ApplicationUser implements UserDetails {
     private String confirmPassword;
     private Date createdAt;
     private Date updatedAt;
+    private boolean enabled;
 
+    // OneToMany with Project.
     @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
     private List<Project> projects = new ArrayList<>();
 
-    // OneToMany with Project.
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH, mappedBy = "user", orphanRemoval = true)
+    private VerificationToken token;
 
     public ApplicationUser() { }
 
@@ -117,6 +121,14 @@ public class ApplicationUser implements UserDetails {
         this.projects = projects;
     }
 
+    public VerificationToken getToken() {
+        return token;
+    }
+
+    public void setToken(VerificationToken token) {
+        this.token = token;
+    }
+
     /*
      * UserDetails interface methods
      */
@@ -149,8 +161,10 @@ public class ApplicationUser implements UserDetails {
     @Override
     @JsonIgnore
     public boolean isEnabled() {
-        return true;
+        return this.enabled;
     }
 
-
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 }

@@ -4,19 +4,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import tran.example.ppmtool.constants.mapping.MappingConstants;
 import tran.example.ppmtool.domain.applicationuser.ApplicationUser;
 import tran.example.ppmtool.payload.LoginRequest;
+import tran.example.ppmtool.payload.AccountActivatedResponse;
 import tran.example.ppmtool.security.JwtTokenProvider;
 import tran.example.ppmtool.services.applicationusers.ApplicationUserService;
 import tran.example.ppmtool.services.security.ApplicationUserAuthenticationService;
 import tran.example.ppmtool.services.validations.MapValidationErrorService;
+import tran.example.ppmtool.services.verificationtoken.VerificationTokenService;
 import tran.example.ppmtool.validator.ApplicationUserValidator;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
@@ -35,18 +37,21 @@ public class ApplicationUserController {
 
     private ApplicationUserAuthenticationService authenticationService;
 
+    private VerificationTokenService verificationTokenService;
+
 
     @Autowired
     public ApplicationUserController(ApplicationUserService applicationUserService, MapValidationErrorService mapValidationErrorService,
                                      ApplicationUserValidator applicationUserValidator, JwtTokenProvider jwtTokenProvider,
-                                     AuthenticationManager authenticationManager,
-                                     ApplicationUserAuthenticationService authenticationService) {
+                                     AuthenticationManager authenticationManager, ApplicationUserAuthenticationService authenticationService,
+                                     VerificationTokenService verificationTokenService) {
         this.applicationUserService = applicationUserService;
         this.mapValidationErrorService = mapValidationErrorService;
         this.applicationUserValidator = applicationUserValidator;
         this.jwtTokenProvider = jwtTokenProvider;
         this.authenticationManager = authenticationManager;
         this.authenticationService = authenticationService;
+        this.verificationTokenService = verificationTokenService;
     }
 
     @PostMapping("/login")
@@ -58,16 +63,24 @@ public class ApplicationUserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody ApplicationUser applicationUser, BindingResult bindingResult) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody ApplicationUser applicationUser, BindingResult bindingResult,
+                                          HttpServletRequest request) {
         // validate that passwords match.
         applicationUserValidator.validate(applicationUser, bindingResult);
-
 
         ResponseEntity<?> errorMap = mapValidationErrorService.outputCustomError(bindingResult);
         if(errorMap != null) return errorMap;
 
-        ApplicationUser newApplicationUser = applicationUserService.saveUser(applicationUser);
+        ApplicationUser newApplicationUser = applicationUserService.saveUser(applicationUser, request);
 
         return new ResponseEntity<>(newApplicationUser, HttpStatus.CREATED);
+    }
+
+    @PostMapping(MappingConstants.CONFIRM_REGISTRATION_URL + "/{token}")
+    public ResponseEntity<?> confirmRegistration(@PathVariable String token) {
+        ApplicationUser user = verificationTokenService.validateVerificationToken(token);
+        applicationUserService.enableRegisteredUser(user);
+
+        return new ResponseEntity<>(new AccountActivatedResponse("account is activated!!"), HttpStatus.OK);
     }
 }

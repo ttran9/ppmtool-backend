@@ -8,6 +8,8 @@ public class SecurityConstants {
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String HEADER_STRING = "Authorization";
     public static final long EXPIRATION_TIME = 2700000; // in milliseconds so 2700 seconds / 45 mins.
+    public static final String EMAIL_LOGIN = System.getenv("TEST_EMAIL"); // in milliseconds so 2700 seconds / 45 mins.
+    public static final String EMAIL_PASSWORD = System.getenv("TEST_PASSWORD"); // in milliseconds so 2700 seconds / 45 mins.
 //    public static final long EXPIRATION_TIME = 300000;
 
 }
