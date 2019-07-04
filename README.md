@@ -62,3 +62,9 @@ file from an environment variable instead of just having it as a hard-coded publ
             not necessary and simply moving the user to a successful registration page was sufficient. If it was needed
             to display a message from the server then I would display a new action type and handle this in the securityReducer
             but I did not find this necessary for the time being.  
+        - When uploading this to Heroku I had a slight issue when attempting to register a new user.
+            - After debugging for a little bit (analyzing the error logs) there was a really descriptive error where I
+            had to follow a link in order to verify that it was really me logging in. Basically, since the Heroku app 
+            is not local to my machine google was blocking the application from connecting via SMTP to send the verification
+            email and once I followed this link and I tried to re-register the user I was able to create a new "enabled"
+            or activated user.
