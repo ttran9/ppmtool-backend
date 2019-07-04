@@ -44,3 +44,21 @@ file from an environment variable instead of just having it as a hard-coded publ
         - When debugging this I first looked at the console and noticed that when we were submitting we were hitting the
         /api/login with a POST request and shortly I realized that CustomResponseEntityExceptionHandler did not handle
         the BadCredentials exception and that is why I added in an extra method with the @ExceptionHandler annotation.
+
+- New Features:
+    1. Refer to bug #1 in the above section ("Bugs").
+    2. I have added a feature where after the user is logged in then the user must first activate their account.
+        - This is done by the server emailing the user with a provided token that must be used in order to activate the user account.
+            - Upon successful activation the token is removed from the server.
+            - I found [this](https://medium.com/@apdharshi/sending-email-confirmation-for-account-activation-with-spring-java-cc3f5bb1398e) 
+            to be helpful when implementing spring's mailing service.
+            - I also decided to add in a new custom exception which could be used by the server to return an error if there
+            was an issue with the verification token such as using a token that no longer exists or has expired.
+        - I also had to add a few new components on the front end in order to display web pages that the user must go through
+        in order to activate his/her own account.
+            - Also in the front end I had to add a new action in order to call the back-end api in order to process the
+            account activation using a passed in token from the URL as a parameter.
+            - One thing to note is that upon successful activation I decided not to dispatch an event as I felt this was
+            not necessary and simply moving the user to a successful registration page was sufficient. If it was needed
+            to display a message from the server then I would display a new action type and handle this in the securityReducer
+            but I did not find this necessary for the time being.  
