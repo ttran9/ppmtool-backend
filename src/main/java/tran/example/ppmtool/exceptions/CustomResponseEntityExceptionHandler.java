@@ -56,7 +56,7 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     }
 
     @ExceptionHandler
-    public final ResponseEntity<Object> handleUsernameCreationException(VerificationTokenException ex) {
+    public final ResponseEntity<Object> handleVerificationTokenException(VerificationTokenException ex) {
         VerificationTokenExceptionResponse response = new VerificationTokenExceptionResponse(ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
