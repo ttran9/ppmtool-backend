@@ -13,7 +13,7 @@ public interface VerificationTokenService {
 
     /**
      * Returns a verification token (if valid) from the database.
-     * @param verificationToken The token specified from the user attempting to have his/her account activated.
+     * @param verificationToken The token specified from the user.
      * @return Grab the specified verification token from the database.
      */
     VerificationToken getVerificationToken(String verificationToken);

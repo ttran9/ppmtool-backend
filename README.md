@@ -20,7 +20,7 @@ file from an environment variable instead of just having it as a hard-coded publ
         pages where the expected behavior is that the user gets redirected to the dashboard page but instead
         there is the issue of the JSON content being returned indicating the user has entered invalid credentials but
         this should not be the case because the user is already logged in and this can be seen where the user has
-        a valid jwt token inside of their localStorage.
+        a valid jwt emailVerificationToken inside of their localStorage.
         - I will attempt to investigate the above where it appears I am not utilizing react-router properly and there are
     some undesirable side effects.
     2. **Solution (to i.):** 
@@ -48,16 +48,16 @@ file from an environment variable instead of just having it as a hard-coded publ
 - New Features:
     1. Refer to bug #1 in the above section ("Bugs").
     2. I have added a feature where after the user is logged in then the user must first activate their account.
-        - This is done by the server emailing the user with a provided token that must be used in order to activate the user account.
-            - Upon successful activation the token is removed from the server.
+        - This is done by the server emailing the user with a provided emailVerificationToken that must be used in order to activate the user account.
+            - Upon successful activation the emailVerificationToken is removed from the server.
             - I found [this](https://medium.com/@apdharshi/sending-email-confirmation-for-account-activation-with-spring-java-cc3f5bb1398e) 
             to be helpful when implementing spring's mailing service.
             - I also decided to add in a new custom exception which could be used by the server to return an error if there
-            was an issue with the verification token such as using a token that no longer exists or has expired.
+            was an issue with the verification emailVerificationToken such as using a emailVerificationToken that no longer exists or has expired.
         - I also had to add a few new components on the front end in order to display web pages that the user must go through
         in order to activate his/her own account.
             - Also in the front end I had to add a new action in order to call the back-end api in order to process the
-            account activation using a passed in token from the URL as a parameter.
+            account activation using a passed in emailVerificationToken from the URL as a parameter.
             - One thing to note is that upon successful activation I decided not to dispatch an event as I felt this was
             not necessary and simply moving the user to a successful registration page was sufficient. If it was needed
             to display a message from the server then I would display a new action type and handle this in the securityReducer
@@ -68,3 +68,19 @@ file from an environment variable instead of just having it as a hard-coded publ
             is not local to my machine google was blocking the application from connecting via SMTP to send the verification
             email and once I followed this link and I tried to re-register the user I was able to create a new "enabled"
             or activated user.
+    3. I have added in a feature where a user must be logged in to request for a password change.
+        - I had to refactor quite a bit of code because I wanted to be able to use the same base domain object that was
+        generating the tokens for the email verification (user account activation) and the password change. Both of these
+        are based off of using a token that points to a user and has an expiration date of a day.
+            - I will refactor my initial implementation to require that the password token change be expired within 15
+            minutes of request.
+        - While implementing this feature I also had to create a utility class inside the event package as I was
+        going to re-use (violate DRY) when sending the emails for either the password change or the account activation.
+        - In regards to implementing the front-end portion I found that I also had to refactor a few components because
+        I was using some of the same "screens" when the user successfully changed their password or activated their account.
+        I also decided that I should re-use the same "view/screen" for when the user initially requests to change their password
+        that the user should be redirected to a page that tells him/her to check their email account for a link (with 
+        a generated token) on how to change their password or activate their account.
+            - When implementing the change password functionality I followed much of the same logic as I used for
+            activating the user account and sending out the e-mail so this was a big factor as to why I had to do some
+            refactoring of components so I could re-use them.

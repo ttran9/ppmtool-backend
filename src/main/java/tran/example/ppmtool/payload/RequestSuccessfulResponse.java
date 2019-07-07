@@ -1,9 +1,9 @@
 package tran.example.ppmtool.payload;
 
-public class AccountActivatedResponse {
+public class RequestSuccessfulResponse {
     private String message;
 
-    public AccountActivatedResponse(String message) {
+    public RequestSuccessfulResponse(String message) {
         this.message = message;
     }
 
@@ -17,7 +17,7 @@ public class AccountActivatedResponse {
 
     @Override
     public String toString() {
-        return "AccountActivatedResponse{" +
+        return "RequestSuccessfulResponse{" +
                 "message='" + message + '\'' +
                 '}';
     }

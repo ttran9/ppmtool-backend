@@ -3,11 +3,11 @@ package tran.example.ppmtool.exceptions.security;
 /**
  * A custom JSON object that will be returned when we are trying to activate a user but the token is not valid.
  */
-public class VerificationTokenExceptionResponse {
+public class EmailVerificationTokenExceptionResponse {
 
     private String token;
 
-    public VerificationTokenExceptionResponse(String token) {
+    public EmailVerificationTokenExceptionResponse(String token) {
         this.token = token;
     }
 

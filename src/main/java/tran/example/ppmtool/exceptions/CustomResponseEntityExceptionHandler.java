@@ -20,7 +20,7 @@ import tran.example.ppmtool.exceptions.security.*;
 public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler
-    public final ResponseEntity<Object> handleProjectIdException(ProjectIdException ex, WebRequest webRequest) {
+    public final ResponseEntity<Object> handleProjectIdException(ProjectIdException ex) {
         ProjectIdExceptionResponse projectIdExceptionResponse = new ProjectIdExceptionResponse(ex.getMessage());
         return new ResponseEntity<>(projectIdExceptionResponse, HttpStatus.BAD_REQUEST);
     }
@@ -56,8 +56,20 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     }
 
     @ExceptionHandler
-    public final ResponseEntity<Object> handleVerificationTokenException(VerificationTokenException ex) {
-        VerificationTokenExceptionResponse response = new VerificationTokenExceptionResponse(ex.getMessage());
+    public final ResponseEntity<Object> handleEmailVerificationTokenException(EmailVerificationTokenException ex) {
+        EmailVerificationTokenExceptionResponse response = new EmailVerificationTokenExceptionResponse(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleRequestPasswordChangeException(RequestChangePasswordException ex) {
+        RequestChangePasswordExceptionResponse response = new RequestChangePasswordExceptionResponse(ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleChangePasswordTokenException(ChangePasswordTokenException ex) {
+        ChangePasswordTokenExceptionResponse response = new ChangePasswordTokenExceptionResponse();
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 

@@ -29,7 +29,22 @@ public interface ApplicationUserService {
     /**
      * Sends an email with the token required to activate the registered user's account.
      * @param registeredUser The object containing the registered user name (email).
-     * @param request The request
+     * @param request The request containing information about the app's URL.
      */
     void sendSuccessRegistrationEmail(ApplicationUser registeredUser, HttpServletRequest request);
+
+    /**
+     * Takes in a new password and a user to change the password for.
+     * @param newPassword The new password the user is changing to.
+     * @param user The user to change the password for.
+     */
+    void changeUserPassword(String newPassword, ApplicationUser user);
+
+    /**
+     * Sends a URL to change the user's account along with a token which is necessary to change the password.
+     * @param userName The email account that the change password link will be emailed to
+     * @param request The request containing information about the app's URL.
+     */
+    void sendPasswordChangeEmail(String userName, HttpServletRequest request);
+
 }

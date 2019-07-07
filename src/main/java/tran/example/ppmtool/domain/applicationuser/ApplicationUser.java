@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import tran.example.ppmtool.domain.project.Project;
-import tran.example.ppmtool.domain.security.VerificationToken;
+import tran.example.ppmtool.domain.security.ChangePasswordToken;
+import tran.example.ppmtool.domain.security.EmailVerificationToken;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -41,7 +42,10 @@ public class ApplicationUser implements UserDetails {
     private List<Project> projects = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH, mappedBy = "user", orphanRemoval = true)
-    private VerificationToken token;
+    private EmailVerificationToken emailVerificationToken;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH, mappedBy = "user", orphanRemoval = true)
+    private ChangePasswordToken changePasswordToken;
 
     public ApplicationUser() { }
 
@@ -121,12 +125,20 @@ public class ApplicationUser implements UserDetails {
         this.projects = projects;
     }
 
-    public VerificationToken getToken() {
-        return token;
+    public EmailVerificationToken getEmailVerificationToken() {
+        return emailVerificationToken;
     }
 
-    public void setToken(VerificationToken token) {
-        this.token = token;
+    public void setEmailVerificationToken(EmailVerificationToken emailVerificationToken) {
+        this.emailVerificationToken = emailVerificationToken;
+    }
+
+    public ChangePasswordToken getChangePasswordToken() {
+        return changePasswordToken;
+    }
+
+    public void setChangePasswordToken(ChangePasswordToken changePasswordToken) {
+        this.changePasswordToken = changePasswordToken;
     }
 
     /*
