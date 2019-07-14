@@ -1,3 +1,9 @@
+# Live Demo
+- A running demo can be seen [here](https://sb-react-ppm.herokuapp.com/)
+
+# Other Information
+- To view the code (non-compressed main.js file) go to this [repository](https://github.com/ttran9/ExamplePPMTool) and then go to the directory of, "ppmtool-react-client" and this is the React front-end application.
+
 # Overview
 
 - This is section 8 of [this course](https://www.udemy.com/full-stack-project-spring-boot-20-react-redux/)
