@@ -2,6 +2,7 @@
 - A running demo can be seen [here](https://sb-react-ppm.herokuapp.com/)
 
 # Other Information
+- As of Oct 14th, 2019, I won't be focused on fixing this application. This application was just my introduction to React and Spring Boot. Instead I am focusing on another project that re-uses a lot of the code from this project and the two repositories can be seen [here (back-end code)](https://github.com/ttran9/comp-build-backend) and [here (front-end code)](https://github.com/ttran9/comp-build-frontend)
 - To view the code (non-compressed main.js file) go to this [repository](https://github.com/ttran9/ExamplePPMTool) and then go to the directory of, "ppmtool-react-client" and this is the React front-end application.
 
 # Overview
