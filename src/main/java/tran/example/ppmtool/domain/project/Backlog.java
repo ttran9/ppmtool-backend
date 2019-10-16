@@ -26,7 +26,7 @@ public class Backlog {
      * OneToMany project tasks
      * without orphanRemoval our cascade would not go downstream and delete the Project Task(s) associated with this Backlog.
      */
-    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "backlog", orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY, mappedBy = "backlog", orphanRemoval = true)
     private List<ProjectTask> projectTasks = new ArrayList<>();
 
     public Backlog() { }
