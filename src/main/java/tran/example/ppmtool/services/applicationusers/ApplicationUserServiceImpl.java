@@ -60,7 +60,9 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
             ApplicationUser createdUser = applicationUserRepository.save(newApplicationUser);
 
             // send an email
-            sendSuccessRegistrationEmail(newApplicationUser, request);
+            if(request != null) {
+                sendSuccessRegistrationEmail(newApplicationUser, request);
+            }
 
             return createdUser;
         } catch(UsernameDuplicateException | DataIntegrityViolationException ex) {
@@ -75,10 +77,12 @@ public class ApplicationUserServiceImpl implements ApplicationUserService {
         applicationUserRepository.save(user);
         // user is enabled so now delete the registration token required to register the user.
         EmailVerificationToken emailVerificationToken = emailVerificationTokenRepository.findByUser(user);
-        if(emailVerificationToken == null) {
-            throw new EmailVerificationTokenException("token is not present.");
+//        if(emailVerificationToken == null) {
+//            throw new EmailVerificationTokenException("token is not present.");
+//        }
+        if(emailVerificationToken != null) {
+            emailVerificationTokenRepository.deleteByToken(emailVerificationToken.getToken());
         }
-        emailVerificationTokenRepository.deleteByToken(emailVerificationToken.getToken());
     }
 
     @Override
