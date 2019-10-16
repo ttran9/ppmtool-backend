@@ -31,10 +31,10 @@ public class BootstrapData implements ApplicationListener<ContextRefreshedEvent>
 
     private void createUsers() {
         // create a user that is enabled
-        ApplicationUser user = createUser(USER_NAME_ONE, USER_PASSWORD, FULL_NAME_ONE);
+        ApplicationUser user = createUser(USER_ONE_EMAIL, USER_PASSWORD, FULL_NAME_ONE);
 
         // create a user with an account that is not enabled.
-        ApplicationUser secondUser = createUser(USER_NAME_TWO, USER_PASSWORD, FULL_NAME_TWO);
+        ApplicationUser secondUser = createUser(USER_TWO_EMAIL, USER_PASSWORD, FULL_NAME_TWO);
 
         // save/create users
         applicationUserService.saveUser(user, null);
